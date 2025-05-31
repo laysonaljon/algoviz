@@ -9,7 +9,6 @@ import Footer from '@/components/footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleMobileMenuToggle = () => {
     setIsMobileOpen(!isMobileOpen);
@@ -17,10 +16,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const handleMobileSidebarClose = () => {
     setIsMobileOpen(false);
-  };
-
-  const handleSidebarCollapseChange = (collapsed: boolean) => {
-    setIsSidebarCollapsed(collapsed);
   };
 
   return (
@@ -46,7 +41,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Sidebar
             isMobileOpen={isMobileOpen}
             onMobileClose={handleMobileSidebarClose}
-            onCollapseChange={handleSidebarCollapseChange}
           />
           <div
             className={`flex flex-col flex-grow

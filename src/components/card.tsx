@@ -1,5 +1,12 @@
 import React, { forwardRef } from 'react';
-import { CardProps } from '@/commons/types';
+
+export interface CardProps {
+  title: string;
+  children: React.ReactNode;
+  height?: string;
+  className?: string;
+  contentClassName?: string;
+}
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ title, children, height = 'h-[230px]', className = '', contentClassName = '' }, ref) => {
@@ -8,7 +15,6 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         <h2 className="text-base font-semibold mb-2 text-indigo-600 dark:text-indigo-400 flex-shrink-0">
           {title}
         </h2>
-        {/* Apply the forwarded ref to the inner div that handles scrolling */}
         <div ref={ref} className={`flex-grow overflow-y-auto pr-2 text-sm ${contentClassName}`}>
           {children}
         </div>
@@ -16,5 +22,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     );
   }
 );
+
+Card.displayName = 'Card';
 
 export default Card;

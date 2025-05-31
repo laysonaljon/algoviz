@@ -1,28 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import logo from '@/assets/logo.png';
 import { Icons } from '@/commons/icons';
 import { sidebarItems } from '@/commons/constants';
 
 interface SidebarProps {
   isMobileOpen: boolean;
   onMobileClose: () => void;
-  onCollapseChange: (collapsed: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollapseChange }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
   const toggleCollapse = () => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    onCollapseChange(newState);
+    setIsCollapsed(prevState => !prevState);
   };
 
   useEffect(() => {
@@ -35,10 +29,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollap
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileOpen, onMobileClose]);
-
-  useEffect(() => {
-    onCollapseChange(isCollapsed);
-  }, [isCollapsed, onCollapseChange]);
 
 
   const CollapseIcon = isCollapsed ? Icons.IoMdArrowDroprightCircle : Icons.IoMdArrowDropleftCircle;
@@ -54,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollap
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 h-screen pt-14 transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 z-40 h-screen pt-14 transition-[width,transform] duration-300 ease-in-out
           ${isCollapsed ? 'w-20' : 'w-64'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
           sm:translate-x-0 sm:static sm:h-screen
@@ -64,21 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollap
         aria-label="Sidebar"
       >
         <div className="flex-grow px-3 py-4 overflow-y-auto relative">
-          <Link href="/" className={`flex items-center ps-2.5 mb-5 ${isCollapsed ? 'justify-center' : ''} sm:hidden`}>
-            <Image
-              src={logo}
-              alt="AlgoViz Logo"
-              width={24}
-              height={24}
-              className="mr-3"
-              priority
-            />
-            {!isCollapsed && (
-              <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                Visualizer
-              </span>
-            )}
-          </Link>
+
 
           <ul className="space-y-2 font-medium">
             {sidebarItems.map((item) => {
@@ -106,9 +82,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollap
                     {IconComponent && (
                       <IconComponent className="flex-shrink-0 w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                     )}
-                    {!isCollapsed && (
-                      <span className="ms-3 whitespace-nowrap">{item.name}</span>
-                    )}
+                    <span className={`ms-3 whitespace-nowrap
+                                      ${isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}
+                                      transition-all duration-300 ease-in-out`}>
+                      {item.name}
+                    </span>
                   </Link>
                 </li>
               );
@@ -130,11 +108,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onMobileClose, onCollap
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <CollapseIcon className="w-6 h-6 flex-shrink-0" />
-            {!isCollapsed && (
-              <span className="ms-3 whitespace-nowrap">
-                Collapse Sidebar
-              </span>
-            )}
+            <span className={`ms-3 whitespace-nowrap
+                              ${isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto'}
+                              transition-all duration-300 ease-in-out`}>
+              Collapse Sidebar
+            </span>
           </button>
         </div>
       </aside>
