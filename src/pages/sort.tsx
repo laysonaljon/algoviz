@@ -65,7 +65,7 @@ const sortingAlgorithms = {
   Insertion: async (arr: number[], visualize: VisualizeFn) => {
     const a = [...arr];
     for (let i = 1; i < a.length; i++) {
-      let key = a[i];
+      const key = a[i];
       let j = i - 1;
       visualize(a, i, -2, `Considering element ${key} (at index ${i}) for insertion.`, 0);
       await new Promise((r) => setTimeout(r, 400));
